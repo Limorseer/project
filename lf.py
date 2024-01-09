@@ -1,5 +1,6 @@
 from tkinter import *
 
+
 window = Tk()
 window.title("Приложение CtaviaNS")
 window.geometry('420x500')
@@ -7,9 +8,13 @@ window.resizable(False, False)
 window.iconbitmap(default="64.ico")
 window.config(bg='#a6caf0')
 
-
+def go_back(main_window, current_window):
+    current_window.destroy()
+    main_window.deiconify()
 
 def new_window():
+    window.withdraw()
+
     def convert_number():
         number = entry_number.get()
         from_base = int(entry_from_base.get())
@@ -43,13 +48,13 @@ def new_window():
 
     window1 = Tk()
     window1.title("Приложение CtaviaNS")
-    window1.geometry('420x500')
+    window1.geometry(window.geometry())
     window1.resizable(False, False)
     window1.iconbitmap(default="64.ico")
     window1.config(bg='#a6caf0')
 
     k = Label(window1, text="Перевод чисел  \n в различные Системы Счисления")
-    k.pack(pady=0)
+    k.pack(pady=15)
     k.config(bg="#a6caf0", font=("W3$iP", 16))
 
     l = Label(window1, text="Введите ваше число и \n его систему счисления:", font=("W3$iP", 13))
@@ -75,7 +80,7 @@ def new_window():
     entry_to_base['validatecommand'] = (entry_to_base.register(validate_input), '%P')
     entry_to_base.place(x=13, y=240)
     l = Label(window1, text="система счисления", font=("W3$iP", 13))
-    l.place(x=52, y=238)
+    l.place(x=62, y=238)
     l.config(bg="#a6caf0")
 
     button_convert = Button(window1, text="Конвертировать", command=convert_number)
@@ -87,12 +92,18 @@ def new_window():
     label_result.place(x=10, y=350)
     label_result.config(bg="#a6caf0")
 
+    button_back = Button(window1, text="Назад", command=lambda: go_back(window, window1))
+    button_back.place(x=10, y=10)
+    button_back.config(fg="#000000", bg="#a7a6f0", font=("W3$iP", 10), activebackground='#f0a6ef',
+                          activeforeground="#000000")
+
     window1.mainloop()
 
 
 
 
 def new_window1():
+    window.withdraw()
 
     def convert_to_decimal(number, base):
         try:
@@ -141,7 +152,7 @@ def new_window1():
 
     window2 = Tk()
     window2.title("Приложение CtaviaNS")
-    window2.geometry('420x500')
+    window2.geometry(window.geometry())
     window2.resizable(False, False)
     window2.iconbitmap(default="64.ico")
     window2.config(bg='#bed2f7')
@@ -197,6 +208,9 @@ def new_window1():
     label_result = Label(window2, text="Результат: ", font=("Badonic", 17))
     label_result.place(x=125, y=380)
     label_result.config(bg='#bed2f7')
+
+    button_back = Button(window2, text="Назад", command=lambda: go_back(window, window2))
+    button_back.pack()
 
     window2.mainloop()
 
