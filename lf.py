@@ -210,7 +210,7 @@ def new_window1():
     label_result.config(bg='#bed2f7')
 
     button_back = Button(window2, text="Назад", command=lambda: go_back(window, window2))
-    button_back.pack()
+    button_back.place(x=10, y=10)
 
     window2.mainloop()
 
