@@ -8,6 +8,7 @@ window.resizable(False, False)
 window.iconbitmap(default="64.ico")
 window.config(bg='#a6caf0')
 
+
 def go_back(main_window, current_window):
     current_window.destroy()
     main_window.deiconify()
@@ -15,10 +16,43 @@ def go_back(main_window, current_window):
 def new_window():
     window.withdraw()
 
+    def to_dec(num, cur):
+        num = num.upper()
+        shift = 10 - ord("A")
+        ans = 0
+        sAns = ""
+        j = 0
+        for i in num[::-1]:
+            ans += int(f"{i if i.isdigit() else (ord(i) + shift)}") * (cur ** j)
+            sAns += f"{i if i.isdigit() else (ord(i) + shift)}*{cur}^{j} + "
+            j = j + 1
+
+        sAns = sAns[:-2]
+        return (sAns, ans)
+
+    def from_dec(num, to):
+        tmp = num
+        shift = 10 - ord("A")
+        sR = ""
+        sAns = ""
+        while tmp != 0:
+            div = tmp // to
+            mod = tmp % to
+            sR += f"{tmp}/{to}: div = {div}, mod = {mod} ({chr(mod - shift)})" + "\n"
+            tmp = div
+            sAns = str(mod if mod < 10 else chr(mod - shift)) + sAns
+
+        return (sR, sAns)
+
     def convert_number():
         number = entry_number.get()
         from_base = int(entry_from_base.get())
         to_base = int(entry_to_base.get())
+
+        rToDec = to_dec(number, from_base)[0]
+        ansToDec = to_dec(number, from_base)[1]
+        rFromDec = from_dec(ansToDec, to_base)[0]
+        ansFromDec = from_dec(ansToDec, to_base)[1]
 
         try:
             if not number or not entry_from_base.get() or not entry_to_base.get():
@@ -39,6 +73,7 @@ def new_window():
                 decimal_number = decimal_number // to_base
 
             label_result.config(text="Результат: " + converted_number)
+            return (rToDec, ansToDec, rFromDec, ansFromDec)
         except ValueError as e:
             label_result.config(text="Ошибка: проверьте \n правильность \n введения данных")
 
@@ -46,15 +81,32 @@ def new_window():
         valid_chars = set('0123456789ABCDEFGHIJKLMNOPQRSTUVWXYZ')
         return all(char in valid_chars for char in input_str)
 
+    def open_second_window1():
+
+        second_window1 = Toplevel(window1)
+
+        second_window1.title("Приложение CtaviaNS")
+        second_window1.geometry('420x500')
+        second_window1.resizable(False, False)
+        second_window1.iconbitmap(default="64.ico")
+        second_window1.config(bg='#a6caf0')
+        tmp = convert_number()
+        second_label = Label(second_window1, text="Решение: ", font=("W3$iP", 16), bg="#a6caf0")
+        second_label.pack()
+
+        second_label = Label(second_window1, text=tmp[0] + "= " + str(tmp[1]) + "\n" + tmp[2] + tmp[3],
+                                 font=("Verdana", 13), bg="#a6caf0")
+        second_label.pack()
+
     window1 = Tk()
     window1.title("Приложение CtaviaNS")
-    window1.geometry(window.geometry())
+    window1.geometry('420x500')
     window1.resizable(False, False)
     window1.iconbitmap(default="64.ico")
     window1.config(bg='#a6caf0')
 
     k = Label(window1, text="Перевод чисел  \n в различные Системы Счисления")
-    k.pack(pady=15)
+    k.pack(pady=1)
     k.config(bg="#a6caf0", font=("W3$iP", 16))
 
     l = Label(window1, text="Введите ваше число и \n его систему счисления:", font=("W3$iP", 13))
@@ -80,10 +132,10 @@ def new_window():
     entry_to_base['validatecommand'] = (entry_to_base.register(validate_input), '%P')
     entry_to_base.place(x=13, y=240)
     l = Label(window1, text="система счисления", font=("W3$iP", 13))
-    l.place(x=62, y=238)
+    l.place(x=52, y=238)
     l.config(bg="#a6caf0")
 
-    button_convert = Button(window1, text="Конвертировать", command=convert_number)
+    button_convert = Button(window1, text="Конвертировать", command=lambda: (convert_number(), open_second_window1()))
     button_convert.place(x=13, y=280)
     button_convert.config(fg="#000000", bg="#a7a6f0", font=("W3$iP", 15), activebackground='#f0a6ef',
                           activeforeground="#000000")
@@ -93,13 +145,11 @@ def new_window():
     label_result.config(bg="#a6caf0")
 
     button_back = Button(window1, text="Назад", command=lambda: go_back(window, window1))
-    button_back.place(x=10, y=10)
+    button_back.place(x=10, y=7)
     button_back.config(fg="#000000", bg="#a7a6f0", font=("W3$iP", 10), activebackground='#f0a6ef',
-                          activeforeground="#000000")
+                       activeforeground="#000000")
 
     window1.mainloop()
-
-
 
 
 def new_window1():
