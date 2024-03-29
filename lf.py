@@ -87,7 +87,7 @@ def new_window():
 
         second_window1.title("Приложение CtaviaNS")
         second_window1.geometry('420x500')
-        second_window1.resizable(False, False)
+
         second_window1.iconbitmap(default="64.ico")
         second_window1.config(bg='#a6caf0')
         tmp = convert_number()
@@ -100,7 +100,7 @@ def new_window():
 
     window1 = Tk()
     window1.title("Приложение CtaviaNS")
-    window1.geometry('420x500')
+    window1.geometry(window.geometry())
     window1.resizable(False, False)
     window1.iconbitmap(default="64.ico")
     window1.config(bg='#a6caf0')
